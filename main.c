@@ -5,30 +5,40 @@
 #define BUF_SIZE 50
 
 
+int cli(int bufSize, char *cpyBuffer, char ***tabPointer);
+int display(char ***tabPointer);
 
+/*------------------------------------------------------------*/
 
-
-int cli(int bufSize, char *cpyBuffer);
-
-cli(int bufSize, char *cpyBuffer) 
+int 
+cli(int bufSize, char *cpyBuffer, char ***tabPointer) 
 {
 	char *pCursor=cpyBuffer;
-	char **tabPointer=NULL;
+	char **tempPointer=NULL;
 	
-	tabPointer=malloc(sizeof(char*)*3);
+	tempPointer=malloc(sizeof(char*)*3);
 	
 	
 	
 	cpyBuffer[4]='\0';
-	tabPointer[0]=pCursor;
-	tabPointer[1]=(pCursor+5);
+	tempPointer[0]=pCursor;
+	tempPointer[1]=(pCursor+5);
 
-	printf("\nArg 0 : %s",tabPointer[0]);
-	printf("\nArg 0 : %s",tabPointer[1]);
+	printf("\nArg 0 : %s",tempPointer[0]);
+	printf("\nArg 0 : %s",tempPointer[1]);
+	
+	*tabPointer=tempPointer;
+	
 return 0;	
 }
 
+/*------------------------------------------------------------*/
 
+int 
+display(char ***tabPointer) {
+	
+return 0;
+}
 
 
 
@@ -37,15 +47,13 @@ return 0;
 int main (int argc, char *argv[])
 {
 	char buffer[BUF_SIZE]={0};
-	/*
-	printf("\n > ");
-	fgets(buffer,BUF_SIZE,stdin);
-	*/
+	char **tabPointer=NULL;
+
 	strcpy(buffer,"calc vs");
 	
-	cli(BUF_SIZE,buffer);
+	cli(BUF_SIZE,buffer,&tabPointer);
 
-	
+	printf("\n arg 0 : %s",tabPointer[0]);
 	
 	return 0;
 
