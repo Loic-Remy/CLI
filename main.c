@@ -33,6 +33,12 @@ cli(int bufSize, char *buffer, char ***tabPointer, size_t *nb)
 	
 	for (i=0, arg=1; i<=bufLen; i++) {
 		if (*pCursor==34) {
+			if (gui==1) {
+				(*tabPointer)[arg]=pCursor+1;
+			}
+			else {
+				*pCursor='\0';
+			}
 			gui*=(-1);
 			pCursor++;
 		}
