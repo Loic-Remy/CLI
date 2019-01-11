@@ -79,13 +79,21 @@ int main (int argc, char *argv[])
 	char **tabArg=NULL;
 	size_t nbArg=1;
 
-	printf("\n$ ");
-	fgets(buffer,BUF_SIZE,stdin);
-	
-	cli(BUF_SIZE,buffer,&tabArg,&nbArg);
+
+	if (argc==1) {
+		printf("\n$ ");
+		fgets(buffer,BUF_SIZE,stdin);
+		cli(BUF_SIZE,buffer,&tabArg,&nbArg);
+	}
+	else {
+		tabArg=argv;
+		nbArg=argc-1;
+	}
 
 	displayTabP(tabArg,nbArg);
 	
+	printf("\n");
+	system("pause");
 	return 0;
 
 }
