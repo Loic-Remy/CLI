@@ -16,9 +16,13 @@ cli(int bufSize, char *buffer, char ***tabPointer, size_t *nb)
 	char *pCursor=buffer;
 	size_t i=0, arg=2;
 	size_t bufLen=strlen(buffer);
+	int gui=1;
 	
 	for(i=0; i<=bufLen; i++) {
-		if (buffer[i]==' ') {
+		if (buffer[i]==34) {
+			gui*=(-1);
+		}
+		else if (buffer[i]==32 && gui==1) {
 			arg++;
 		} 
 	}
@@ -28,13 +32,20 @@ cli(int bufSize, char *buffer, char ***tabPointer, size_t *nb)
 	(*tabPointer)[1]=pCursor;
 	
 	for (i=0, arg=1; i<=bufLen; i++) {
-		if (*pCursor==32) {
+		if (*pCursor==34) {
+			gui*=(-1);
+			pCursor++;
+		}
+		else if (*pCursor==32 && gui==1) {
 			*pCursor='\0';
 			pCursor++;
 			arg++;
 			(*tabPointer)[arg]=pCursor;
 		}
-		pCursor++;
+		else {
+			pCursor++;
+		}
+
 	}
 	
 	*nb=arg;
@@ -62,7 +73,7 @@ int main (int argc, char *argv[])
 	char **tabArg=NULL;
 	size_t nbArg=1;
 
-	strncpy(buffer,"edit vs 23.11.2018 \"Anniversaire Loic\"",BUF_SIZE);
+	strncpy(buffer,"edit vs \"Anniversaire Loic\"",BUF_SIZE);
 	
 	cli(BUF_SIZE,buffer,&tabArg,&nbArg);
 
