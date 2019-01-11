@@ -79,7 +79,8 @@ int main (int argc, char *argv[])
 	char **tabArg=NULL;
 	size_t nbArg=1;
 
-	strncpy(buffer,"edit vs \"Anniversaire Loic\"",BUF_SIZE);
+	printf("\n$ ");
+	fgets(buffer,BUF_SIZE,stdin);
 	
 	cli(BUF_SIZE,buffer,&tabArg,&nbArg);
 
