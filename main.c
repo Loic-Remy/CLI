@@ -5,36 +5,39 @@
 #define BUF_SIZE 50
 
 
-int cli(int bufSize, char *cpyBuffer, char ***tabPointer, size_t *nb);
-int display(char **tabPointer, int nb);
+int cli(int bufSize, char *buffer, char ***tabPointer, size_t *nb);
+int displayTabP(char **tabPointer, size_t nb);
 
 /*------------------------------------------------------------*/
 
 int 
-cli(int bufSize, char *cpyBuffer, char ***tabPointer, size_t *nb) 
+cli(int bufSize, char *buffer, char ***tabPointer, size_t *nb) 
 {
-	char *pCursor=cpyBuffer;
-	char **tempPointer=NULL;
-	size_t i=0;
-	int gui=1;
+	char *pCursor=buffer;
+	size_t i=0, arg=2;
+	size_t bufLen=strlen(buffer);
 	
-	tempPointer=malloc(sizeof(char*)*3);
-	tempPointer[0]=pCursor;
+	for(i=0; i<=bufLen; i++) {
+		if (buffer[i]==' ') {
+			arg++;
+		} 
+	}
 	
-	for (i=0; i<=bufSize-1; i++) {
-		if (*pCursor==32 && gui==1) {
+	*tabPointer=malloc(arg*sizeof(char*));
+	(*tabPointer)[0]=NULL;
+	(*tabPointer)[1]=pCursor;
+	
+	for (i=0, arg=1; i<=bufLen; i++) {
+		if (*pCursor==32) {
 			*pCursor='\0';
 			pCursor++;
-			tempPointer[*nb]=pCursor;
-			(*nb)++;
-		}
-		else if (*pCursor==34) {
-			gui = gui*(-1);
+			arg++;
+			(*tabPointer)[arg]=pCursor;
 		}
 		pCursor++;
 	}
 	
-	*tabPointer=tempPointer;
+	*nb=arg;
 	
 return 0;	
 }
@@ -42,30 +45,28 @@ return 0;
 /*------------------------------------------------------------*/
 
 int 
-display(char **tabPointer, int nb) {
+displayTabP(char **tabPointer, size_t nb) {
 	size_t i=0;
 	
 	for (i=0; i<=nb; i++) {
-	printf("\nArg [%d] : %s",i,tabPointer[i]);
+	printf("\nElement [%lu]: %s",i,tabPointer[i]);
 	}
 return 0;
 }
 
-
-
-
+/*------------------------------------------------------------*/
 
 int main (int argc, char *argv[])
 {
 	char buffer[BUF_SIZE]={0};
-	char **tabPointer=NULL;
-	size_t nb=1;
+	char **tabArg=NULL;
+	size_t nbArg=1;
 
-	strcpy(buffer,"edit vs 27 \"Nouvel an\"");
+	strncpy(buffer,"edit vs 23.11.2018 \"Anniversaire Loic\"",BUF_SIZE);
 	
-	cli(BUF_SIZE,buffer,&tabPointer,&nb);
+	cli(BUF_SIZE,buffer,&tabArg,&nbArg);
 
-	display(tabPointer,1);
+	displayTabP(tabArg,nbArg);
 	
 	return 0;
 
