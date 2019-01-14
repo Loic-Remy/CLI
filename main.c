@@ -5,13 +5,14 @@
 #define BUF_SIZE 50
 
 
-int cli(int bufSize, char *buffer, char ***tabPointer, size_t *nb);
-int displayTabP(char **tabPointer, size_t nb);
+int CLI_Prompt(int bufSize, char *buffer, char ***tabPointer, size_t *nb);
+int CLI_DisplayTabP(char **tabPointer, size_t nb);
+int CLI_FreePP(char*** tabPointer, size_t nb);
 
 /*------------------------------------------------------------*/
 
 int 
-cli(int bufSize, char *buffer, char ***tabPointer, size_t *nb) 
+CLI_Prompt(int bufSize, char *buffer, char ***tabPointer, size_t *nb) 
 {
 	char *pCursor=buffer;
 	size_t i=0, arg=2;
@@ -62,7 +63,7 @@ return 0;
 /*------------------------------------------------------------*/
 
 int 
-displayTabP(char **tabPointer, size_t nb) {
+CLI_DisplayTabP(char **tabPointer, size_t nb) {
 	size_t i=0;
 	
 	for (i=0; i<=nb; i++) {
@@ -70,6 +71,22 @@ displayTabP(char **tabPointer, size_t nb) {
 	}
 return 0;
 }
+
+/*------------------------------------------------------------*/
+
+int 
+CLI_FreePP(char*** tabPointer, size_t nb) {
+	size_t i=0;
+	
+	for (i=0; i<=nb; i++) {
+		free((*tabPointer)[i]);
+		
+	}
+	free(*tabPointer);
+	*tabPointer=NULL;
+}
+
+
 
 /*------------------------------------------------------------*/
 
@@ -83,14 +100,17 @@ int main (int argc, char *argv[])
 	if (argc==1) {
 		printf("\n$ ");
 		fgets(buffer,BUF_SIZE,stdin);
-		cli(BUF_SIZE,buffer,&tabArg,&nbArg);
+		CLI_Prompt(BUF_SIZE,buffer,&tabArg,&nbArg);
 	}
 	else {
 		tabArg=argv;
 		nbArg=argc-1;
 	}
 
-	displayTabP(tabArg,nbArg);
+	CLI_DisplayTabP(tabArg,nbArg);
+	
+	CLI_FreePP(&tabArg,nbArg);
+	
 	
 	printf("\n");
 	system("pause");
