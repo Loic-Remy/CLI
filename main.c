@@ -2,17 +2,28 @@
 #include <string.h>
 #include <stdio.h>
 
-#define BUF_SIZE 50
+#define BUF_SIZE 100
 
-
-int CLI_Prompt(int bufSize, char *buffer, char ***tabPointer, size_t *nb);
+int CLI_Prompt(char buffer[]);
+int CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb);
 int CLI_DisplayTabP(char **tabPointer, size_t nb);
 int CLI_FreePP(char*** tabPointer, size_t nb);
 
-/*------------------------------------------------------------*/
+/*--------------------- F U N C ------------------------------*/
 
 int 
-CLI_Prompt(int bufSize, char *buffer, char ***tabPointer, size_t *nb) 
+CLI_Prompt(char buffer[]) {
+	
+	printf("\n$ ");
+	fgets(buffer,BUF_SIZE,stdin);
+	
+	return 0;
+}
+
+/*--------------------- F U N C ------------------------------*/
+
+int 
+CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb) 
 {
 	char *pCursor=buffer;
 	size_t i=0, arg=2;
@@ -60,7 +71,7 @@ CLI_Prompt(int bufSize, char *buffer, char ***tabPointer, size_t *nb)
 return 0;	
 }
 
-/*------------------------------------------------------------*/
+/*--------------------- F U N C ------------------------------*/
 
 int 
 CLI_DisplayTabP(char **tabPointer, size_t nb) {
@@ -72,7 +83,7 @@ CLI_DisplayTabP(char **tabPointer, size_t nb) {
 return 0;
 }
 
-/*------------------------------------------------------------*/
+/*--------------------- F U N C ------------------------------*/
 
 int 
 CLI_FreePP(char*** tabPointer, size_t nb) {
@@ -84,11 +95,11 @@ CLI_FreePP(char*** tabPointer, size_t nb) {
 	}
 	free(*tabPointer);
 	*tabPointer=NULL;
+	
+	return 0;
 }
 
-
-
-/*------------------------------------------------------------*/
+/*------------------------ M A I N ----------------------------------*/
 
 int main (int argc, char *argv[])
 {
@@ -98,9 +109,8 @@ int main (int argc, char *argv[])
 
 
 	if (argc==1) {
-		printf("\n$ ");
-		fgets(buffer,BUF_SIZE,stdin);
-		CLI_Prompt(BUF_SIZE,buffer,&tabArg,&nbArg);
+		CLI_Prompt(buffer);
+		CLI_Interpret(buffer,&tabArg,&nbArg);
 	}
 	else {
 		tabArg=argv;
