@@ -4,7 +4,7 @@
 
 #define BUF_SIZE 100
 
-int CLI_Prompt(char buffer[]);
+int CLI_Prompt(char buffer[],int option);
 int CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb);
 int CLI_DisplayTabP(char **tabPointer, size_t nb);
 int CLI_FreePP(char*** tabPointer, size_t nb);
@@ -12,9 +12,16 @@ int CLI_FreePP(char*** tabPointer, size_t nb);
 /*--------------------- F U N C ------------------------------*/
 
 int 
-CLI_Prompt(char buffer[]) {
+CLI_Prompt(char buffer[],int option) {
 	
-	printf("\n$ ");
+	switch(option) {
+		case 1:
+			printf("\n$ ");
+			break;
+		default:
+			break;
+	}
+
 	fgets(buffer,BUF_SIZE,stdin);
 	
 	return 0;
@@ -109,7 +116,7 @@ int main (int argc, char *argv[])
 
 
 	if (argc==1) {
-		CLI_Prompt(buffer);
+		CLI_Prompt(buffer,1);
 		CLI_Interpret(buffer,&tabArg,&nbArg);
 	}
 	else {
