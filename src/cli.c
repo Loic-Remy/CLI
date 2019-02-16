@@ -1,47 +1,52 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "../inc/cli.h"
 
 #define BUF_SIZE 100
+#define QUOTE 34
+#define BLANK_SPACE 32
+ 
 
-int CLI_Prompt(char buffer[],int option);
-int CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb);
-int CLI_DisplayTabP(char **tabPointer, size_t nb);
-int CLI_FreePP(char*** tabPointer, size_t nb);
+
+static char *ErrorCodeDesc[] = {
+	"No error", /* 0 - CLI_SUCCESS */
+	"Memory allocation failed", /* 1 - CLI_MEMORYERROR */
+	"Failed to open the file", /* 2 - CLI_FILEERROR */
+	"Miss end quote in commande-line"	/* CLI_MISSENQUOTE */
+};
+
+
 
 /*--------------------- F U N C ------------------------------*/
 
-int 
-CLI_Prompt(char buffer[],int option) {
+CLI_ErrorCode 
+CLI_Prompt(const char *text, char *buffer,FILE *stream) {
 	
-	switch(option) {
-		case 1:
-			printf("\n$ ");
-			break;
-		default:
-			break;
+	if (0<strlen(text)) {
+			printf("\n%s ",text);
 	}
 
-	fgets(buffer,BUF_SIZE,stdin);
+	fgets(buffer,BUF_SIZE,stream);
 	
-	return 0;
+	return CLI_SUCCESS;
 }
 
 /*--------------------- F U N C ------------------------------*/
 
-int 
+CLI_ErrorCode 
 CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb) 
 {
 	char *pCursor=buffer;
 	size_t i=0, arg=2;
 	size_t bufLen=strlen(buffer);
-	int gui=1;
+	int inQuote=1;
 	
 	for(i=0; i<=bufLen; i++) {
-		if (buffer[i]==34) {
-			gui*=(-1);
+		if (buffer[i]==QUOTE) {
+			inQuote*=(-1);
 		}
-		else if (buffer[i]==32 && gui==1) {
+		else if (buffer[i]==QUOTE && inQuote==1) {
 			arg++;
 		} 
 	}
@@ -51,21 +56,24 @@ CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb)
 	(*tabPointer)[1]=pCursor;
 	
 	for (i=0, arg=1; i<=bufLen; i++) {
-		if (*pCursor==34) {
-			if (gui==1) {
+		if (*pCursor==BLANK_SPACE) {
+			if (inQuote==1) {
 				(*tabPointer)[arg]=pCursor+1;
 			}
 			else {
 				*pCursor='\0';
 			}
-			gui*=(-1);
+			inQuote*=(-1);
 			pCursor++;
 		}
-		else if (*pCursor==32 && gui==1) {
+	else if (*pCursor==BLANK_SPACE && inQuote==1) {
 			*pCursor='\0';
 			pCursor++;
 			arg++;
 			(*tabPointer)[arg]=pCursor;
+		}
+		else if (*pCursor=='\n') {
+			*pCursor='\0';
 		}
 		else {
 			pCursor++;
@@ -75,24 +83,23 @@ CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb)
 	
 	*nb=arg;
 	
-return 0;	
+return CLI_SUCCESS;
 }
 
 /*--------------------- F U N C ------------------------------*/
 
-int 
-CLI_DisplayTabP(char **tabPointer, size_t nb) {
+void
+CLI_DisplayArg(char **tabPointer, size_t nb) {
 	size_t i=0;
 	
 	for (i=0; i<=nb; i++) {
 	printf("\nElement [%lu]: %s",i,tabPointer[i]);
 	}
-return 0;
 }
 
 /*--------------------- F U N C ------------------------------*/
 
-int 
+CLI_ErrorCode 
 CLI_FreePP(char*** tabPointer, size_t nb) {
 	size_t i=0;
 	
@@ -103,34 +110,14 @@ CLI_FreePP(char*** tabPointer, size_t nb) {
 	free(*tabPointer);
 	*tabPointer=NULL;
 	
-	return 0;
+	return CLI_SUCCESS;
 }
 
-/*------------------------ M A I N ----------------------------------*/
+/*--------------------- F U N C ------------------------------*/
 
-int main (int argc, char *argv[])
-{
-	char buffer[BUF_SIZE]={0};
-	char **tabArg=NULL;
-	size_t nbArg=1;
-
-
-	if (argc==1) {
-		CLI_Prompt(buffer,1);
-		CLI_Interpret(buffer,&tabArg,&nbArg);
-	}
-	else {
-		tabArg=argv;
-		nbArg=argc-1;
-	}
-
-	CLI_DisplayTabP(tabArg,nbArg);
+void
+CLI_DisplayError(CLI_ErrorCode error) {
 	
-	CLI_FreePP(&tabArg,nbArg);
-	
-	
-	printf("\n");
-	system("pause");
-	return 0;
-
+	printf("\n%d\t%s",error,ErrorCodeDesc[error]);
 }
+

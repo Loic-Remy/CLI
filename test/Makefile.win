@@ -1,15 +1,15 @@
-# Project: cli
+# Project: test_cli
 # Makefile created by Dev-C++ 5.11
 
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = src/cli.o
-LINKOBJ  = src/cli.o
-LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g -Wall -g3
+OBJ      = main.o ../src/cli.o
+LINKOBJ  = main.o ../src/cli.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g -Wall "../../../../../../../../Program Files (x86)/Dev-Cpp/MinGW64/lib/CUnit.a" -g3
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
-BIN      = cli.a
+BIN      = test_cli.exe
 CXXFLAGS = $(CXXINCS) -g3 -g -Wall
 CFLAGS   = $(INCS) -g3 -g -Wall
 RM       = rm.exe -f
@@ -21,9 +21,11 @@ all: all-before $(BIN) all-after
 clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
-$(BIN): $(LINKOBJ)
-	ar r $(BIN) $(LINKOBJ)
-	ranlib $(BIN)
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-src/cli.o: src/cli.c
-	$(CC) -c src/cli.c -o src/cli.o $(CFLAGS)
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
+
+../src/cli.o: ../src/cli.c
+	$(CC) -c ../src/cli.c -o ../src/cli.o $(CFLAGS)

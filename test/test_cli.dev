@@ -1,17 +1,17 @@
 [Project]
-FileName=cli.dev
-Name=cli
-Type=2
+FileName=test_cli.dev
+Name=test_cli
+Type=1
 Ver=2
 ObjFiles=
-Includes=
+Includes="C:\Users\Loïc\SkyDrive\Privé\Informatique\Language C\cli\inc"
 Libs=
 PrivateResource=
 ResourceIncludes=
 MakeIncludes=
 Compiler=
 CppCompiler=
-Linker=
+Linker="../../../../../../../../Program Files (x86)/Dev-Cpp/MinGW64/lib/CUnit.a"_@@_
 IsCpp=0
 Icon=
 ExeOutput=
@@ -19,7 +19,7 @@ ObjectOutput=
 LogOutput=
 LogOutputEnabled=0
 OverrideOutput=0
-OverrideOutputName=cli.dll
+OverrideOutputName=test_cli.exe
 HostApplication=
 UseCustomMakefile=0
 CustomMakefile=
@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0000000000000000001000000
-UnitCount=2
+UnitCount=3
 
 [VersionInfo]
 Major=1
@@ -51,7 +51,7 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=src\cli.c
+FileName=main.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -61,7 +61,17 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=inc\cli.h
+FileName=..\src\cli.c
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit3]
+FileName=..\inc\cli.h
 CompileCpp=0
 Folder=
 Compile=1
