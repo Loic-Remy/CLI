@@ -24,7 +24,7 @@ CLI_ErrorCode
 CLI_Prompt(const char *text, char *buffer,FILE *stream) {
 	
 	if (0<strlen(text)) {
-			printf("\n%s ",text);
+			printf("%s ",text);
 	}
 
 	fgets(buffer,BUF_SIZE,stream);
@@ -52,6 +52,8 @@ CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb)
 	}
 	
 	*tabPointer=malloc(arg*sizeof(char*));
+	if(NULL==tabPointer) {return CLI_MEMORYERROR;}
+
 	(*tabPointer)[0]=NULL;
 	(*tabPointer)[1]=pCursor;
 	
@@ -93,7 +95,7 @@ CLI_DisplayArg(char **tabPointer, size_t nb) {
 	size_t i=0;
 	
 	for (i=0; i<=nb; i++) {
-	printf("\nElement [%lu]: %s",i,tabPointer[i]);
+	printf("\nElement [%zd]: %s",i,tabPointer[i]);
 	}
 }
 

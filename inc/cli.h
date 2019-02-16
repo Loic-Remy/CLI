@@ -21,8 +21,5 @@ void CLI_DisplayError(CLI_ErrorCode error);
 
 
 
-
-
-
 #endif
 
