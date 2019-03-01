@@ -7,6 +7,7 @@
 #define BUF_SIZE 100
 #define QUOTE 34
 #define BLANK_SPACE 32
+#define CARRIAGE_RETURN 13
 #define NUL 0
  
 
@@ -38,52 +39,39 @@ CLI_Prompt(const char *text, char *buffer,FILE *stream) {
 CLI_ErrorCode 
 CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb) 
 {
-	char *pCursor=buffer;
-	size_t i=0, arg=2;
+	size_t i=0, arg=1, newArg=1;
 	size_t bufLen=strlen(buffer);
-	int inQuote=1;
+	int inQuote=-1;
 	
-	for(i=0; i<=bufLen; i++) {
-		if (buffer[i]==QUOTE) {
-			inQuote*=(-1);
-		}
-		else if (buffer[i]==BLANK_SPACE && inQuote==1) {
-			arg++;
-		} 
-	}
-	
-	*tabPointer=malloc(arg*sizeof(char*));
+	*tabPointer=malloc(bufLen/2+1*sizeof(char*));
 	if(NULL==tabPointer) 
 		return CLI_MEMORYERROR;
-
-	(*tabPointer)[0]=NULL;
-	(*tabPointer)[1]=pCursor;
 	
-	for (i=0, arg=1; i<=bufLen; i++) {
-		if (*pCursor==BLANK_SPACE) {
-			if (inQuote==1) {
-				(*tabPointer)[arg]=pCursor+1;
-			}
-			else {
-				*pCursor=NUL;
-			}
+	for(i=0; i<=bufLen-1; i++) {
+		if (buffer[i]==QUOTE) {
+			buffer[i]=NUL;
 			inQuote*=(-1);
-			pCursor++;
+			newArg=1;
 		}
-	else if (*pCursor==BLANK_SPACE && inQuote==1) {
-			*pCursor=NUL;
-			pCursor++;
-			arg++;
-			(*tabPointer)[arg]=pCursor;
+		else if (buffer[i]==BLANK_SPACE && inQuote==-1) {
+			buffer[i]=NUL;
+			newArg=1;
 		}
-		else if (*pCursor==NUL) {
-			*pCursor=NUL;
+		else if (buffer[i]==CARRIAGE_RETURN) {
+			buffer[i]=NUL;
+			newArg=1;
 		}
 		else {
-			pCursor++;
+			if (newArg==1) {
+				(*tabPointer)[arg]=&buffer[i];
+				arg++;
+				newArg=0;
+			}
 		}
-
 	}
+	
+	if (inQuote==1)
+		return CLI_MISSENDQUOTE;
 	
 	*nb=arg;
 	
