@@ -46,7 +46,7 @@ CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb)
 		if (buffer[i]==QUOTE) {
 			inQuote*=(-1);
 		}
-		else if (buffer[i]==QUOTE && inQuote==1) {
+		else if (buffer[i]==BLANK_SPACE && inQuote==1) {
 			arg++;
 		} 
 	}
