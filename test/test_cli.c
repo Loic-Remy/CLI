@@ -158,6 +158,14 @@ void test_MissEndQuote(void)
 	CU_ASSERT_STRING_EQUAL(tabArg[2],"voiture");
 }
 
+void test_DoubleQuote(void)
+{
+	strcpy(testBuffer,"avion \"\"voiture\"\"");
+	CLI_Interpret(testBuffer,&tabArg,&nb);
+	CU_ASSERT_STRING_EQUAL(tabArg[1],"avion");
+	CU_ASSERT_STRING_EQUAL(tabArg[2],"\"voiture\"");
+}
+
 
 
 int main() {
@@ -197,7 +205,8 @@ int main() {
    		NULL == CU_add_test(pCLI_Interpret,"Pass 2 arg", test_nbArg_2) ||
 		NULL == CU_add_test(pCLI_Interpret,"End with quoted arg", test_EndQuoted) ||
 		NULL == CU_add_test(pCLI_Interpret,"Start with quoted arg", test_StartQuoted) ||
-		NULL == CU_add_test(pCLI_Interpret,"Miss end quote", test_MissEndQuote))
+		NULL == CU_add_test(pCLI_Interpret,"Miss end quote", test_MissEndQuote) ||
+		NULL == CU_add_test(pCLI_Interpret,"Double quote", test_DoubleQuote))
    {
       CU_cleanup_registry();
       return CU_get_error();
