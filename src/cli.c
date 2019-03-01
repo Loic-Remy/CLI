@@ -3,17 +3,18 @@
 #include <stdio.h>
 #include "../inc/cli.h"
 
+
 #define BUF_SIZE 100
 #define QUOTE 34
 #define BLANK_SPACE 32
+#define NUL 0
  
 
-
 static char *ErrorCodeDesc[] = {
-	"No error", /* 0 - CLI_SUCCESS */
-	"Memory allocation failed", /* 1 - CLI_MEMORYERROR */
-	"Failed to open the file", /* 2 - CLI_FILEERROR */
-	"Miss end quote in commande-line"	/* CLI_MISSENQUOTE */
+	"No error", 						/* 0 - CLI_SUCCESS */
+	"Memory allocation failed", 		/* 1 - CLI_MEMORYERROR */
+	"Failed to open the file", 			/* 2 - CLI_FILEERROR */
+	"Miss end quote in commande-line"	/* 3 - CLI_MISSENQUOTE */
 };
 
 
@@ -52,7 +53,8 @@ CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb)
 	}
 	
 	*tabPointer=malloc(arg*sizeof(char*));
-	if(NULL==tabPointer) {return CLI_MEMORYERROR;}
+	if(NULL==tabPointer) 
+		return CLI_MEMORYERROR;
 
 	(*tabPointer)[0]=NULL;
 	(*tabPointer)[1]=pCursor;
@@ -63,19 +65,19 @@ CLI_Interpret(char *buffer, char ***tabPointer, size_t *nb)
 				(*tabPointer)[arg]=pCursor+1;
 			}
 			else {
-				*pCursor='\0';
+				*pCursor=NUL;
 			}
 			inQuote*=(-1);
 			pCursor++;
 		}
 	else if (*pCursor==BLANK_SPACE && inQuote==1) {
-			*pCursor='\0';
+			*pCursor=NUL;
 			pCursor++;
 			arg++;
 			(*tabPointer)[arg]=pCursor;
 		}
-		else if (*pCursor=='\n') {
-			*pCursor='\0';
+		else if (*pCursor==NUL) {
+			*pCursor=NUL;
 		}
 		else {
 			pCursor++;
@@ -122,4 +124,9 @@ CLI_DisplayError(CLI_ErrorCode error) {
 	
 	printf("\n%d\t%s",error,ErrorCodeDesc[error]);
 }
+
+/*--------------------- F U N C ------------------------------*/
+
+
+
 
