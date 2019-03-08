@@ -25,7 +25,7 @@ static char *ErrorCodeDesc[] = {
 CLI_ErrorCode 
 CLI_Prompt(const char *text, char *buffer,FILE *stream) {
 	
-	if (0<strlen(text)) {
+	if (strlen(text)>0) {
 			printf("%s ",text);
 	}
 
