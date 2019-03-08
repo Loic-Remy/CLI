@@ -5,7 +5,7 @@ Command-Line Interpreter in C
 The framework is designed to receive the user input and parse it to store the different arguments of the command-line in an array of pointer.
 
 ## Principle
-The framework divide the arguments of the command-line using the blank spaces between them.
+The framework divides the arguments of the command-line using the blank spaces between them.
 
 Arguments containing a blank space are recognized by the use of double quotes.
 
