@@ -92,13 +92,9 @@ CLI_DisplayArg(char **tabPointer, size_t nb) {
 /*--------------------- F U N C ------------------------------*/
 
 CLI_ErrorCode 
-CLI_FreePP(char*** tabPointer, size_t nb) {
-	size_t i=0;
+CLI_FreePP(char*** tabPointer) {
 	
-	for (i=0; i<=nb; i++) {
-		free((*tabPointer)[i]);
-		
-	}
+	
 	free(*tabPointer);
 	*tabPointer=NULL;
 	
